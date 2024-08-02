@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @unique
+  password       String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  files          File[]    
+  refreshTokens  RefreshToken[]  @relation("UserRefreshToken") 
+  RefreshToken RefreshToken[]
+  
+  @@index([id])
+}
+
+model RefreshToken {
+  id             Int      @id @default(autoincrement())
+  token          String   @unique
+  userId         String   
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+  user           User     @relation(fields: [userId], references: [id])
+  User User[] @relation("UserRefreshToken")
+  
+  @@index([userId])
+}
+
+
+model File {
+  id              Int       @id @default(autoincrement())
+  name            String    
+  extension       String    
+  mimeType        String    
+  size            Int       
+  uploadDate      DateTime  @default(now()) 
+  userId          String   // Change the type of userId to String
+  user            User      @relation(fields: [userId], references: [id])
+  status          String    @default("uploaded")
+  processingErrors String?  
+  filePath        String?   
+
+  @@index([userId])
+  @@index([status])
+}

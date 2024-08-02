@@ -1,15 +1,39 @@
-const express = require("express");
-const dotenv = require("dotenv");
+import app from "./app";
+import { Server } from "http";
 
-dotenv.config();
+let server: Server;
 
-const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
-app.get("/", (req: any, res: any) => {
-  res.send("Express + TypeScript Server");
+server = app.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      console.info("Server closed");
+      process.exit(0); // Выход с кодом 0, указывающий на успешное завершение
+    });
+  } else {
+    process.exit(1); // Код 1, если сервер не был запущен
+  }
+};
+
+const unexpectedErrorHandler = (error: Error) => {
+  console.error("Unexpected error", error);
+  exitHandler();
+};
+
+process.on("uncaughtException", unexpectedErrorHandler);
+process.on("unhandledRejection", unexpectedErrorHandler);
+
+process.on("SIGTERM", () => {
+  console.info("SIGTERM received");
+  if (server) {
+    server.close(() => {
+      console.info("Server closed on SIGTERM");
+      process.exit(0);
+    });
+  }
 });
