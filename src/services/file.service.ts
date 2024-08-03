@@ -55,9 +55,14 @@ export const getFileById = async (id: number) => {
   return file;
 };
 
-// Функция получения списка файлов с пагинацией
-export const listFiles = async (page: number, listSize: number) => {
+// Функция получения списка файлов с пагинацией для опреденного пользователя
+export const listFilesByUser = async (
+  userId: string,
+  page: number,
+  listSize: number
+) => {
   const files = await prisma.file.findMany({
+    where: { userId },
     skip: (page - 1) * listSize,
     take: listSize,
   });

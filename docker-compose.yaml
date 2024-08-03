@@ -1,14 +1,12 @@
-version: "3.8"
-
 services:
   mysql_dev:
     image: mysql:8.0
     container_name: mysql_dev
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_DEV_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DEV_DATABASE}
-      MYSQL_USER: ${MYSQL_DEV_USER}
-      MYSQL_PASSWORD: ${MYSQL_DEV_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_dev_data:/var/lib/mysql
     ports:
@@ -66,19 +64,6 @@ services:
     networks:
       - dev_network
       - test_network
-
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   container_name: rabbitmq
-  #   environment:
-  #     RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-  #     RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672" # Порт для панели управления
-  #   networks:
-  #     - dev_network
-  #     - test_network
 
 volumes:
   mysql_dev_data:

@@ -8,8 +8,13 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API документация для ERP.AERO",
     },
+    servers: [
+      {
+        url: "http://localhost:3000/api",
+      },
+    ],
   },
-  apis: ["./src/routes/*.ts", "./src/controllers/*.ts"],
+  apis: ["./src/routes/*.ts"],
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
